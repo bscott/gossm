@@ -15,7 +15,11 @@ gossm performs checks if servers can be reached every *t* seconds and notifies w
 
 Run from terminal:
 
-`go build github.com/ssimunic/gossm/cmd/gossm && ./gossm -config configs/myconfig.json`
+```bash
+go get github.com/ssimunic/gossm/cmd/gossm
+go build github.com/ssimunic/gossm/cmd/gossm
+./gossm -config configs/myconfig.json
+```
 
 This will build and run program with configuration file `configs/myconfig.json`.
 
@@ -38,6 +42,36 @@ Example: `./gossm -config configs/myconfig.json -logfilter tcp -http :1337`. Web
 
 You can also use `./gossm -help` for help.
 
+## Docker
+
+An example Dockerfile is located in the project root. Currently there is no offical build on Docker Hub, but that can be addressed if more people show interest.
+
+### docker-compose
+
+An example docker-compose is also found in our project root.
+
+```yaml
+version: "2"
+
+services:
+  gossm:
+    build: ./
+    ports:
+      - "8067:8080"
+    volumes:
+      - ./configs:/configs
+      - ./logs:/var/log/gossum
+```
+
+Getting started with `docker-compose` is as simple as having Docker and Docker Compose installed on your machine, and typing:
+
+```bash
+docker-compose build
+docker-compose up
+```
+
+Please note that the example config found at `configs/default.json` is invalid JSON, so we will need to fix that before bringing up the container.
+
 ## Configuration
 
 JSON structure is used for configuration. Example can be found in `configs/default.json`.
@@ -58,11 +92,23 @@ JSON structure is used for configuration. Example can be found in `configs/defau
                     ]
                 }
             ],
+            "telegram": [
+                {
+                    "botToken": "123456:ABC-DEF1234...",
+                    "chatId": "12341234"
+                }
+            ],
+            "pushover": [
+                {
+                    "userKey": "user_key",
+                    "appToken": "app_token"
+                }
+            ],
             "sms": [
                 {
                     "sms": "todo"
                 }
-            ]     
+            ]
         },
         "monitor": {
             "checkInterval": 15,
@@ -143,6 +189,18 @@ There can be multiple email or sms notification settings.
 `from` email that notifications will be sent from
 
 `to` array of recipients 
+
+#### Telegram
+
+`botToken` Telegram Bot token obtained via the BotFather.
+
+`chatId` ChatID of the user to message (Can also be a group id).
+
+#### Pushover
+
+`appToken` your Pushover application's API token
+
+`userKey` the user/group key of your Pushover user
 
 #### SMS
 

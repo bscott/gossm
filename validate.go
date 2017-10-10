@@ -48,6 +48,11 @@ func (ns *NotificationSettings) Validate() error {
 				return fmt.Errorf("invalid slack settings: %v", err)
 		}
 	}
+	for _, slack := range ns.Slack {
+		if err := slack.Validate(); err != nil {
+			return fmt.Errorf("invalid slack settings: %v", err)
+		}
+	}
 	return nil
 }
 
