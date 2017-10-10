@@ -34,7 +34,6 @@ func (n *NotificationSettings) GetNotifiers() (notifiers notify.Notifiers) {
 		smsNotifier := &notify.SmsNotifier{Settings: sms}
 		notifiers = append(notifiers, smsNotifier)
 	}
-
 	for _, telegram := range n.Telegram {
 		telegramNotifier := &notify.TelegramNotifier{Settings: telegram}
 		notifiers = append(notifiers, telegramNotifier)
